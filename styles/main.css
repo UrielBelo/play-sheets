@@ -13,9 +13,48 @@
     justify-content: center;
     align-items: center;
 }
+#chooseGameMode{
+    position: absolute;
+    width: 300px;
+    height: 600px;
+    background-color: #eee;
+    left: calc(50vw - 150px);
+    top: calc(50vh - 300px);
+    z-index: 5;
+    border-radius: 15px;
+    border: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: space-around;
+}
+#chooseGameMode p {
+    font-size: 20px;
+    font-weight: 600;
+}
+#chooseGameMode .gameModeOption{
+    width: 200px;
+    height: 200px;
+    background-color: #FFF;
+    border: 1px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#trebleClefOption svg{
+    transform: translateX(50px);
+}
+#bassClefOption svg{
+    transform: scale(2) translateX(80px) translateY(50px);
+}
+#chooseGameMode .gameModeOption:focus{
+    outline: 0;
+}
 #gameView{
     width: 300px;
-    height: 500px;
+    height: 600px;
     background-color: #EEE;
     border-radius: 15px;
     border: 1px solid #333;
@@ -53,7 +92,7 @@ h1{
 #sheet{
     background-color: #F2F2F2;
     border-bottom: 1px solid #333;
-    height: 150px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;

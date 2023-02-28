@@ -3,16 +3,34 @@ const { Factory, EasyScore, System } = Vex.Flow
 const $scoreBoard = document.getElementById('scoreBoard')
 const $sheetFigure = document.getElementById('sheetFigure')
 const $options = document.getElementById('options')
+const $trebleClefOption = document.getElementById('trebleClefOption')
+const $bassClefOption = document.getElementById('bassClefOption')
+const $chooseGameMode = document.getElementById('chooseGameMode')
 
-const notes = ['C4','D4','E4','F4','G4','A4','B4','C5','D5','E5','F5','G5']
+const notesTreble = ['G3','A3','B3','C4','D4','E4','F4','G4','A4','B4','C5','D5','E5','F5','G5','A5','B5']
+const notesBass = ['A3','B3','C4','D4','E4','F4','G4','A4','B4','C5','D5','E5','F5','G5','A5','B5']
 const options = []
 let currentNote
 let green = 0
 let red = 0
+let notes
+let currentClef
+
+$trebleClefOption.addEventListener('mousedown', () => {
+    currentClef = 'treble'
+    start()
+    closeGamemodeChoose()
+})
+$bassClefOption.addEventListener('mousedown', () => {
+    currentClef = 'bass'
+    start()
+    closeGamemodeChoose()
+})
 
 function start(){
     renderScore()
-    const note = notes[getRandomIntInclusive(0,11)]
+    notes = currentClef == 'treble' ? notesTreble : notesBass
+    const note = notes[getRandomIntInclusive(0,notes.length - 1)]
     drawNote(note)
 
     currentNote = note.substring(0,1)
@@ -29,6 +47,10 @@ function start(){
     }
 }
 
+function closeGamemodeChoose(){
+    $chooseGameMode.style.display = 'none'
+}
+
 function drawNote(note){
     $sheetFigure.innerHTML = ''
 
@@ -39,11 +61,19 @@ function drawNote(note){
     const score = vf.EasyScore()
     const system = vf.System()
     
-    system.addStave({
-        voices: [
-            score.voice(score.notes(`${note}/w`, { stem: 'up' })),
-        ]
-    }).addClef('treble').addTimeSignature('4/4')
+    if(currentClef == 'treble'){
+        system.addStave({
+            voices: [
+                score.voice(score.notes(`${note}/w`, { stem: 'up' })),
+            ]
+        }).addClef('treble').addTimeSignature('4/4')
+    }else{
+        system.addStave({
+            voices: [
+                score.voice(score.notes(`${note}/w`, { stem: 'up' })),
+            ]
+        }).addClef('bass').addTimeSignature('4/4')
+    }
     
     vf.draw()
 }
@@ -55,9 +85,9 @@ function getRandomIntInclusive(min, max) {
 }
 
 function getRandomNote(){
-    let note = notes[getRandomIntInclusive(0,11)].substring(0,1)
+    let note = notes[getRandomIntInclusive(0,notes.length - 1)].substring(0,1)
     while(options.indexOf(note) != -1){
-        note = notes[getRandomIntInclusive(0,11)].substring(0,1)
+        note = notes[getRandomIntInclusive(0,notes.length - 1)].substring(0,1)
     }
     return note
 }
@@ -123,16 +153,14 @@ function clearOptions(){
 
 function parseNoteName(note){
     const dictionary = {
-        A: 'Lá',
-        B: 'Si',
-        C: 'Dó',
-        D: 'Ré',
-        E: 'Mi',
-        F: 'Fá',
-        G: 'Sol'
+        A: currentClef == 'treble' ? 'Lá' : 'Dó',
+        B: currentClef == 'treble' ? 'Si' : 'Ré',
+        C: currentClef == 'treble' ? 'Dó' : 'Mi',
+        D: currentClef == 'treble' ? 'Ré' : 'Fá',
+        E: currentClef == 'treble' ? 'Mi' : 'Sol',
+        F: currentClef == 'treble' ? 'Fá' : 'Lá',
+        G: currentClef == 'treble' ? 'Sol' : 'Si'
     }
 
     return dictionary[note]
 }
-
-start()
